@@ -39,7 +39,7 @@ if(isset($_POST['submitLogin'])){
             if($foundPass == $passwordLogin){
                 $_SESSION['isLogged']="YES";
                 $_SESSION['emailLogged']=$emailLogin;
-                header('Location:../home.php');
+                header('Location:../index.php');
             }else{
                 echo '<script>alert("password incorrect")</script>';
 

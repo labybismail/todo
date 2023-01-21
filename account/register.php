@@ -1,6 +1,9 @@
 <?php
 session_start();
 require '../db/connectdb.php';
+if($_SESSION['isLogged']=='YES'){
+    header('Location:../index.php');
+}else{
 
 if(isset($_POST['submitBtn'])){
     $emailRegister    =$_POST['emailRegister'];
@@ -50,6 +53,7 @@ if(isset($_POST['submitBtn'])){
 
 }
 
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
