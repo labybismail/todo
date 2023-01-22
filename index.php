@@ -57,14 +57,19 @@ function fileCreateWrite(){
     }
 
    
-
+//get from json
 $listFetch = file_get_contents('array.json');
 $array_fetched = json_decode($listFetch, true);
 
-
-
-
-
+//delete
+     if(isset($_GET['idToDelete'])){
+      foreach ($array_fetched as $key => $value) {
+        if ($value['title'] == $_GET['idToDelete']) {
+            $array_fetched[$key] = null;
+        }
+      }
+      file_put_contents('array.json', json_encode($array_fetched));
+     }
 
 ?> 
 <!DOCTYPE html>
@@ -137,16 +142,19 @@ $array_fetched = json_decode($listFetch, true);
 
                     <?php
                       foreach($array_fetched as $value){
+                       if($value ==""||$value==null){continue;}
                        if($value['completed']==$currentState){continue;}
                        else{
                         echo '
                         <li class="list-group-item d-flex align-items-center justify-content-center border-0 mb-1 rounded" style="background-color: #f4f6f7;height:50px;">
                                 <p class="float-left mb-0 " style="height:20px; margin-right:5px;">'.$value['title'].'</p>
-                                <form method="post" class="m-0 p-0 float-right" >
-                                  <a href="index.php?id='.$value['title'].'" >
-                                     <button class="btn btn-danger p-0 " value style="width:20px;height:20px;font-size:10px;" name="deleteBtn" >X</button>
+                               
+                                  <a href="index.php?idToDelete='.$value['title'].'" class="m-0 p-0" name="delete" style="width:30px;height:30px;font-size:15px;">
+                                     X
                                   </a>
-                                </form>
+                                  <a href="edit.php?idToEdit='.$value['title'].'" class="m-0 p-0" name="edit" style="width:30px;height:30px;font-size:15px;">
+                                     Edit
+                                  </a>
                           </li>
                         ';
                        }
