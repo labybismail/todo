@@ -131,7 +131,10 @@ if(isset($_POST['submitBtn'])){
 <body>
     
 
-    <form action='' method='POST'>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+            <form action='' method='POST'>
         <label>
             <p class="label-txt">EMAIL</p>
                 <input type="text" class="input" name="emailRegister">
@@ -144,7 +147,7 @@ if(isset($_POST['submitBtn'])){
                 <input type="text" class="input" name="usernameRegister">
             <div class="line-box">
             <div class="line"></div>
-            <span style="opacity:0.6;font-size:15px;">username contain only letters</span>
+            <span style="opacity:0.6;font-size:11px;">username contain only letters</span>
             </div>
         </label>
         <label>
@@ -152,10 +155,15 @@ if(isset($_POST['submitBtn'])){
                 <input type="text" class="input" name="passwordRegister">
             <div class="line-box">
             <div class="line"></div>
-            <span style="opacity:0.6;font-size:15px;">password contain 8 chars and at least 1 capital</span>
+            <span style="opacity:0.6;font-size:11px;">password contain 8 chars and at least 1 capital</span>
             </div>
         </label>
         <button type="submit" name="submitBtn">submit</button>
+        <p class="mt-2">Already have account? <a href="login.php" class="link-info">login here</a></p>
+
     </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
