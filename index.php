@@ -1,16 +1,58 @@
 <?php
-// session_start();
+require 'db/connectdb.php';
+session_start();
 
-// if(!isset($_SESSION['isLogged'])||$_SESSION['isLogged']=="NO"){
-//     header('Location:account/login.php');
+if(!isset($_SESSION['isLogged'])||$_SESSION['isLogged']=="NO"){
+    header('Location:account/login.php');
     
-// }else{ -->
+}else{ 
+  if(isset($_SESSION['emailLogged'])){
+    $stmt = $conn->prepare( "SELECT username FROM users WHERE `email` = :mail");
+    $stmt->execute(array('mail'=>$_SESSION['emailLogged']));
+    $userData=$stmt ->fetchAll();
+  }
 
-//     // echo 'you are logged <form method="post"><button type="submit" name="signout">signOut</button></form>'; -->
-//     // if(isset($_POST['signout'])){
-//     //     session_destroy();
-//     //     header('Location:account/login.php');
-//     // }
+      if(isset($_POST['addBtn'])){
+            
+        if(isset($_POST['addTask'])){
+          if(file_exists('array.json')){
+            $final_data=fileWriteAppend();
+            if(file_put_contents('array.json', $final_data)){
+                  $message = "<label class='text-success'>Data added Success fully</p>";
+            }
+            }else{
+                $final_data=fileCreateWrite();
+                if(file_put_contents('array.json', $final_data))
+                {
+                      $message = "<label class='text-success'>File createed and  data added Success fully</p>";
+                }
+            }
+        }else{
+          echo 'field cannot be empty';
+        }
+          
+    }
+
+
+    //get from json
+    $listFetch = file_get_contents('array.json');
+    $array_fetched = json_decode($listFetch, true);
+
+    //delete
+    if(isset($_GET['idToDelete'])){
+      foreach ($array_fetched as $key => $value) {
+        if ($value['title'] == $_GET['idToDelete']) {
+            $array_fetched[$key] = null;
+        }
+      }
+      file_put_contents('array.json', json_encode($array_fetched));
+    }
+
+    if(isset($_POST['signout'])){
+        session_destroy();
+        header('Location:account/login.php');
+    }
+}
 function fileWriteAppend(){
   $current_data = file_get_contents('array.json');
   $array_data = json_decode($current_data, true);
@@ -35,41 +77,8 @@ function fileCreateWrite(){
   fclose($file);
   return $final_data;
 }
-    if(isset($_POST['addBtn'])){
-        
-        if(isset($_POST['addTask'])){
-          if(file_exists('array.json')){
-            $final_data=fileWriteAppend();
-            if(file_put_contents('array.json', $final_data)){
-                  $message = "<label class='text-success'>Data added Success fully</p>";
-            }
-            }else{
-                $final_data=fileCreateWrite();
-                if(file_put_contents('array.json', $final_data))
-                {
-                      $message = "<label class='text-success'>File createed and  data added Success fully</p>";
-                }
-            }
-        }else{
-          echo 'field cannot be empty';
-        }
-          
-    }
 
-   
-//get from json
-$listFetch = file_get_contents('array.json');
-$array_fetched = json_decode($listFetch, true);
 
-//delete
-     if(isset($_GET['idToDelete'])){
-      foreach ($array_fetched as $key => $value) {
-        if ($value['title'] == $_GET['idToDelete']) {
-            $array_fetched[$key] = null;
-        }
-      }
-      file_put_contents('array.json', json_encode($array_fetched));
-     }
 
 ?> 
 <!DOCTYPE html>
@@ -90,12 +99,24 @@ $array_fetched = json_decode($listFetch, true);
         radial-gradient(100% 164.72% at 100% 100%, #6100ff 0%, #00ff57 100%),
         radial-gradient(100% 148.07% at 0% 0%, #fff500 0%, #51d500 100%);
       background-blend-mode: screen, color-dodge, overlay, difference, normal;}
+      .profileCard form{
+        width: 200px;
+        height: 430px;
+        background-color:rgba(255,255,255,0.5);
+        border-radius:12px;
+        display: flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        box-shadow:1px 1px 8px black;
+        font: italic small-caps bold 12px/0px Georgia, serif;
+      }
     </style>
 </head>
 <body>
 <section class=" gradient-custom" style="height:100vh;">
   <div class="container py-5 h-100">
-    <div class="row d-flex justify-content-center align-items-center h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100 ">
       <div class="col col-xl-10">
 
         <div class="card">
@@ -113,8 +134,8 @@ $array_fetched = json_decode($listFetch, true);
 
             <!-- Tabs navs -->
             <?php
-            if(isset($_POST['notDoneTasks'])){$currentState="NO";}
-            else if(isset($_POST['doneTasks'])){$currentState="YES";}
+            if(isset($_POST['notDoneTasks'])){$currentState="YES";}
+            else if(isset($_POST['doneTasks'])){$currentState="NO";}
             else{$currentState="";} 
             ?>
             <form method="post">
@@ -174,6 +195,15 @@ $array_fetched = json_decode($listFetch, true);
           </div>
         </div>
 
+      </div>
+      <div class="col-2 profileCard " >
+      <form method="post">
+      <?php  foreach ($userData as $value) { ?>
+            <p style="font-size:25px;margin-bottom:70px;"><?php echo "Hello ". $value['username']; ?> </p>
+     <?php } ?>  
+      
+        <button type="submit" class="btn btn-danger" name="signout">signOut</button>
+      </form>
       </div>
     </div>
   </div>
