@@ -87,7 +87,7 @@ function fileCreateWrite(){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>home</title>
+    <title>TodoList</title>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -99,40 +99,25 @@ function fileCreateWrite(){
         radial-gradient(100% 164.72% at 100% 100%, #6100ff 0%, #00ff57 100%),
         radial-gradient(100% 148.07% at 0% 0%, #fff500 0%, #51d500 100%);
       background-blend-mode: screen, color-dodge, overlay, difference, normal;}
-      .profileCard form{
-        width: 200px;
-        height: 430px;
-        background-color:rgba(255,255,255,0.5);
-        border-radius:12px;
-        display: flex;
-        flex-direction:column;
-        justify-content:center;
-        align-items:center;
-        box-shadow:1px 1px 8px black;
-        font: italic small-caps bold 12px/0px Georgia, serif;
-      }
+     
     </style>
 </head>
 <body>
 <section class=" gradient-custom" style="height:100vh;">
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100 ">
-      <div class="col col-xl-10">
+      <div class="col col-xl-9">
 
         <div class="card">
           <div class="card-body p-5">
 
-                    <!-- form -->
             <form method='POST' class="d-flex justify-content-center align-items-center mb-4">
               <div class="form-outline flex-fill">
                 <input type="text" id="addTask" class="form-control" name='addTask'  />
-                <label class="form-label" for="form2">New task...</label>
               </div>
               <button type="submit" class="btn btn-info ms-2" id="addBtn" name='addBtn' >Add</button>
             </form> 
-                    <!-- form -->
-
-            <!-- Tabs navs -->
+                
             <?php
             if(isset($_POST['notDoneTasks'])){$currentState="YES";}
             else if(isset($_POST['doneTasks'])){$currentState="NO";}
@@ -196,15 +181,31 @@ function fileCreateWrite(){
         </div>
 
       </div>
-      <div class="col-2 profileCard " >
-      <form method="post">
-      <?php  foreach ($userData as $value) { ?>
-            <p style="font-size:25px;margin-bottom:70px;"><?php echo "Hello ". $value['username']; ?> </p>
-     <?php } ?>  
       
-        <button type="submit" class="btn btn-danger" name="signout">signOut</button>
-      </form>
+
+
+      <div class="col-3">
+
+        <div class="card" style="border-radius: 15px;">
+          <div class="card-body text-center">
+            <div class="mt-3 mb-4">
+              <img src="ico/user.svg"
+                class="rounded-circle img-fluid" style="width: 60px;" />
+            </div>
+            <h4 class="mb-2"><?php foreach ($userData as $value) {  echo $value['username'] ;}?></h4>
+            <p class="text-muted mb-4">Member </p>
+            <form method="post" > 
+              <button type="button" name="signout" class="btn btn-danger btn-rounded btn-lg">
+                signOut
+              </button>
+            </form>
+          </div>
+        </div>
+
       </div>
+    
+
+
     </div>
   </div>
 </section>
